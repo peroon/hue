@@ -1,3 +1,5 @@
+![](https://raw2.github.com/peroon/hue/master/hue.jpg)
+
 Colorful LED light "hue" controllable with code
 http://www.meethue.com/
 
