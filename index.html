@@ -1,0 +1,48 @@
+<link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js"></script>
+
+<h1>hue controller</h1>
+<input id="ip_address" type="text" placeholder="IP Address" value="192.168.11.12"></input>
+<a href="http://www.meethue.com/api/nupnp">Check IP Address?</a>
+
+<br>
+
+<a href="#" id="id_pattern_1" class="btn btn-primary">pattern 1</a><br>
+<a href="http://developers.meethue.com">http://developers.meethue.com</a>
+
+<script>
+var HUE = HUE || {};
+
+HUE.pattern_1 = function(){
+  this.random_light_all();
+  setTimeout(function(){HUE.pattern_1();}, 1000);
+};
+
+HUE.random_light_all = function(){
+  var data = '';
+  for(var i=1; i<=3; i++){
+    data = '{"on":true, "sat":' + _.random(0, 255) + 
+      ', "bri":' + _.random(0, 255) + ',"hue":' + _.random(0, 65535) + '}';
+    this.change_light(i, data);
+  }
+};
+
+HUE.change_light = function(light_no, data){
+  console.log('change_light');
+  var url = 'http://' + HUE.ip_address + '/api/newdeveloper/lights/' + light_no + '/state'
+  $.ajax({
+   url: url,
+   type: 'PUT',
+   data: data,
+  });
+}
+
+//on load
+$().ready(
+  function(){
+    HUE.ip_address = $("#ip_address").val();
+    $("#id_pattern_1").click( function(){HUE.pattern_1();} );
+    console.log(HUE.ip_address);
+  });
+</script>
